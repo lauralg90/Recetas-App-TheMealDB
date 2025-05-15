@@ -1,4 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Ranchers&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* RESET  -------------------------------------------------------------------------------------------------------- */
+
+a {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
 
 /* VARIABLES  ---------------------------------------------------------------------------------------------------- */
 
@@ -6,7 +16,7 @@
     --blanco: #FFF9EF;
     --marron: #473218;
     --naranja: #FDAA36;
-    --verde: #9BB27C;
+    --verde: #7D9C4A;
 
     --borderRadius: 4px;
 }
@@ -18,22 +28,44 @@ html, body {
     background-color: var(--blanco);
 }
 
-h1, h2, nav {
+h1, h2, h3, nav {
     font-family: "Oswald", sans-serif;
     text-transform: uppercase;
-    text-align: center;
     color: var(--marron);
 }
 
 h1 {
     padding-top: 40px;
     padding-bottom: 40px;
+    font-size: 3rem;
+}
+
+.boton {
+    background-color: var(--verde);
+    color: white;
+    padding: 16px 20px;
+    border-radius: var(--borderRadius);
+    text-transform: uppercase;
+    font-weight: 600;
+    line-height: 110%;
+    transition: all 0.3s ease-in;
+    &:hover {
+        background-color: var(--naranja);
+        color: var(--marron);
+        font-weight: 700;
+    }
+}
+
+.aviso {
+    
 }
 
 /* HEADER  ----------------------------------------------------------------------------------------------------- */
-nav.navbar {
+header#header {
     position: sticky;
     top: 0;
+}
+nav.navbar {
     background-color: var(--blanco) !important;
     border-bottom: solid 2px var(--naranja);
     padding: 0;
@@ -97,6 +129,7 @@ nav.navbar {
 
 
 /* INICIO  ----------------------------------------------------------------------------------------------------- */
+
 select {
   appearance: none;
   -webkit-appearance: none;
@@ -105,6 +138,7 @@ select {
   width: 100%;
   background-color: var(--naranja);
   color: var(--marron);
+  font-weight: 600;
   border: none;
   border-radius: var(--borderRadius);
   padding: 8px 20px;
@@ -120,4 +154,44 @@ select {
 }
 select:focus {
     outline: none;
+}
+
+.grid-resultados {
+    margin-top: 48px;
+    margin-bottom: 40px;
+}
+
+.card-receta {
+    width: 100%;
+    background-color: var(--blanco);
+    border: solid 2px var(--naranja);
+    border-radius: var(--borderRadius);
+    /* Imagen */
+    figure {
+        height: 200px;
+        width: 100%;
+        overflow: hidden;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+    /* Info */
+    > div {
+        padding: 8px 20px;
+        h3 {
+            font-size: 1.5rem;
+            /* Truncar texto a una línea */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        a {
+            display: inline-block;
+            margin: 16px 0;
+        }
+    }
 }
