@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Ranchers&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* VARIABLES  ---------------------------------------------------------------------------------------------------- */
+
+:root {
+    --blanco: #FFF9EF;
+    --marron: #473218;
+    --naranja: #FDAA36;
+    --verde: #9BB27C;
+
+    --borderRadius: 4px;
+}
+
+/* ESTILOS GENERALES  ------------------------------------------------------------------------------------------- */
+
+html, body {
+    font-family: "Roboto", sans-serif;
+    background-color: var(--blanco);
+}
+
+h1, h2, nav {
+    font-family: "Oswald", sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--marron);
+}
+
+h1 {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+/* HEADER  ----------------------------------------------------------------------------------------------------- */
+nav.navbar {
+    position: sticky;
+    top: 0;
+    background-color: var(--blanco) !important;
+    border-bottom: solid 2px var(--naranja);
+    padding: 0;
+    img {
+        width: 100px;
+        &:hover {
+            transition: all 0.2s ease-in;
+            transform: scale(110%);
+        }
+    }
+}
+/* Enlaces */
+.navbar-nav .nav-link, .navbar-nav .nav-link.active {
+    color: var(--marron);
+    background-color: var(--naranja);
+    border-radius: var(--borderRadius);
+    margin-left: 24px;
+    padding: 8px;
+}
+.navbar-nav .nav-link:hover {
+    transition: all 0.2s ease-in;
+    transform: scale(110%);
+}
+.navbar-nav .nav-link.active {
+    font-weight: 700;
+}
+
+/* Burger */
+.navbar-toggler {
+    margin-right: 24px;
+    background-color: var(--naranja);
+    border-radius: var(--borderRadius);
+    border: none;
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+    &:hover {
+        transition: all 0.2s ease-in;
+        transform: scale(110%);
+    }
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23473218' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+/* Menú burger */
+.navbar-collapse {   
+    margin-right: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 20px;
+    .nav-link {
+        @media screen and (width < 576px) {
+            display: block;
+            margin-bottom: 24px;
+            padding: 8px;
+        }
+    }
+}
+
+
+/* INICIO  ----------------------------------------------------------------------------------------------------- */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 100%;
+  background-color: var(--naranja);
+  color: var(--marron);
+  border: none;
+  border-radius: var(--borderRadius);
+  padding: 8px 20px;
+  margin: 16px 0;
+
+  /* Icono flecha */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 width%3D%2212%22 height%3D%2212%22 viewBox%3D%220 0 24 24%22 fill%3D%22none%22 stroke%3D%22%23473218%22 stroke-width%3D%222%22 stroke-linecap%3D%22round%22 stroke-linejoin%3D%22round%22%3E%3Cpolyline points%3D%226 9 12 15 18 9%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 32px;
+
+  cursor: pointer;
+}
+select:focus {
+    outline: none;
+}
