@@ -56,9 +56,6 @@ h1 {
     }
 }
 
-.aviso {
-    
-}
 
 /* HEADER  ----------------------------------------------------------------------------------------------------- */
 header#header {
@@ -156,6 +153,12 @@ select:focus {
     outline: none;
 }
 
+/* Mensaje error al cargar categorías */
+.aviso {
+    color: var(--marron);
+    font-weight: 700;
+}
+
 .grid-resultados {
     margin-top: 48px;
     margin-bottom: 40px;
@@ -166,6 +169,7 @@ select:focus {
     background-color: var(--blanco);
     border: solid 2px var(--naranja);
     border-radius: var(--borderRadius);
+    margin-bottom: 24px;
     /* Imagen */
     figure {
         height: 200px;
@@ -183,15 +187,17 @@ select:focus {
         padding: 8px 20px;
         h3 {
             font-size: 1.5rem;
-            /* Truncar texto a una línea */
-            white-space: nowrap;
-            overflow: hidden;
+            /* Truncar título a una línea --------------------------------------------------------------------------- */
+            display: -webkit-box; 
+            -webkit-line-clamp: 1; 
+            -webkit-box-orient: vertical; 
+            overflow: hidden; 
             text-overflow: ellipsis;
-            max-width: 100%;
         }
         a {
             display: inline-block;
             margin: 16px 0;
+            cursor: pointer;
         }
-    }
+    }       
 }
