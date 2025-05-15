@@ -1,5 +1,12 @@
 'use strict'
 
+function mensajeError(textoMensaje) {
+    const mensajeError = document.createElement("p");
+    mensajeError.textContent = textoMensaje;
+    mensajeError.classList.add("aviso");
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     // Variable global para almacenar datos de categorías que necesitaré
@@ -35,22 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
             // console.log(datosCategorias);
         })
         .catch(error => {
-            const mensajeError = document.createElement("p");
-            mensajeError.textContent = "No se pudieron cargar las categorías. Inténtalo más tarde.";
-            mensajeError.classList.add("aviso");
+            mensajeError("Cannot load categories. Reload the page or try again later.");
             resultados.innerHTML = "";
             select.insertAdjacentElement("afterend", mensajeError);
-
             console.error(error.message);
         });
 
 
     // Resultados de categoría seleccionada ---------------------------------------------------------------------------
-
-    // Si la opción es "All recipes" (por defecto) mostrar recetas más populares
-    if(select.value === ""){
-
-    }
 
     select.addEventListener("change", () => {
         // Limpiar grid
@@ -89,8 +88,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     divInfo.appendChild(titulo);
                     // Botón
                     let boton = document.createElement("a");
-                    boton.classList.add("boton");
-                    boton.textContent = "Ver más";
+                    boton.classList.add("boton-card");
+                    boton.textContent = "View recipe";
+                    boton.setAttribute("href", "#");
+                    // Clases de Bootstrap para abrir la modal
+                    boton.setAttribute("data-bs-toggle", "modal");
+                    boton.setAttribute("data-bs-target", "#modalReceta");
                     divInfo.appendChild(boton);
                     // Col Bootstrap
                     let col = document.createElement("div");
@@ -98,10 +101,49 @@ document.addEventListener("DOMContentLoaded", () => {
                     col.classList.add("col-lg-4");
                     col.appendChild(cardReceta);
                     resultados.appendChild(col);
+
+                    // Guardar id de la receta en el botón
+                    // Al crear tarjetas dinámicamente, cada una tiene su propio botón "View recipe". Este botón está asociado a una receta concreta, por lo que tenemos que asociarlo a su id. Cada botón lleva consigo los datos que necesita gracias a DATASET (guarda datos personalizados en un elemento HTML)
+                    boton.dataset.idReceta = receta.idMeal;
+
+                    // Evento boton-card  -----------------------------------------------------------------------------
+                    boton.addEventListener("click", () => {
+                        const idReceta = boton.dataset.idReceta;
+                        const modalTitulo = document.querySelector(".modal-title");
+                        const modalInfo = document.querySelector("modal-body");
+
+                        fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idReceta}`)
+                            .then(respuesta => {
+                                if (!respuesta.ok) {
+                                    throw new Error("Error en la petición HTTP: " + respuesta.status);
+                                } else {
+                                    return respuesta.json();
+                                }
+                            })
+                            .then(datosReceta => {
+                                let arrayReceta = datosReceta.meals;
+                                arrayReceta.forEach(datos => {
+                                    modalTitulo.textContent = datos.strMeal;
+                                    // Sólo muestra el último resultado
+                                });
+                            })
+                    });
+                    // Evento boton-card  -----------------------------------------------------------------------------
+
                 });
             })
-            .catch(error => console.error(error.message));
+            .catch(error => {
+                mensajeError("No results can be displayed for this category. Please reload the page and try again.");
+                console.error(error.message)
+            });
     });
+
+
+    // Mostrar receta en una modal  -----------------------------------------------------------------------------------
+
+    
+
+    
 
 
 

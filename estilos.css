@@ -6,6 +6,10 @@ a {
     text-decoration: none;
 }
 
+ul, ol {
+    list-style: none;
+}
+
 img {
     max-width: 100%;
 }
@@ -38,22 +42,6 @@ h1 {
     padding-top: 40px;
     padding-bottom: 40px;
     font-size: 3rem;
-}
-
-.boton {
-    background-color: var(--verde);
-    color: white;
-    padding: 16px 20px;
-    border-radius: var(--borderRadius);
-    text-transform: uppercase;
-    font-weight: 600;
-    line-height: 110%;
-    transition: all 0.3s ease-in;
-    &:hover {
-        background-color: var(--naranja);
-        color: var(--marron);
-        font-weight: 700;
-    }
 }
 
 
@@ -159,6 +147,8 @@ select:focus {
     font-weight: 700;
 }
 
+/* RESULTADOS  ----------------------------------------------------------------------------------------------------- */
+
 .grid-resultados {
     margin-top: 48px;
     margin-bottom: 40px;
@@ -187,11 +177,9 @@ select:focus {
         padding: 8px 20px;
         h3 {
             font-size: 1.5rem;
-            /* Truncar título a una línea --------------------------------------------------------------------------- */
-            display: -webkit-box; 
-            -webkit-line-clamp: 1; 
-            -webkit-box-orient: vertical; 
-            overflow: hidden; 
+            /* Truncar título a una línea */
+            white-space: nowrap;
+            overflow: hidden;
             text-overflow: ellipsis;
         }
         a {
@@ -200,4 +188,45 @@ select:focus {
             cursor: pointer;
         }
     }       
+}
+
+.boton-card {
+    background-color: var(--verde);
+    color: white;
+    padding: 16px 20px;
+    border-radius: var(--borderRadius);
+    text-transform: uppercase;
+    font-weight: 600;
+    line-height: 110%;
+    transition: all 0.3s ease-in;
+    &:hover {
+        background-color: var(--naranja);
+        color: var(--marron);
+        font-weight: 700;
+    }
+}
+
+/* MODAL RECETA  --------------------------------------------------------------------------------------------------- */
+
+.boton-modal {
+    border: none;
+    padding: 12px 16px;
+    border-radius: var(--borderRadius);
+    text-transform: uppercase;
+    line-height: 110%;
+    transition: all 0.2s ease-in;
+    &:hover {
+        transform: scale(110%);
+    }
+}
+.boton-guardar {
+    background-color: var(--naranja);
+    color: var(--marron);
+    font-weight: 900;
+}
+
+.boton-borrar {
+    background-color: var(--marron);
+    color: var(--blanco);
+    font-weight: 600;
 }
