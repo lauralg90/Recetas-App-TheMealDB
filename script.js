@@ -1,10 +1,43 @@
 'use strict'
 
-function mensajeError(textoMensaje) {
-    const mensajeError = document.createElement("p");
-    mensajeError.textContent = textoMensaje;
-    mensajeError.classList.add("aviso");
-    return mensajeError;
+// Funciones de mensajes para el usuario  ------------------------------------------------------------------------------
+
+function mensaje(textoMensaje) {
+    const aviso = document.createElement("p");
+    aviso.textContent = textoMensaje;
+    aviso.classList.add("aviso");
+    return aviso; 
+}
+
+function eliminarMensajeAnterior() {
+    // Eliminar un mensaje anterior si existe
+    let mensajeAnterior = document.querySelector(".aviso");
+    if(mensajeAnterior){
+        mensajeAnterior.remove();
+    }
+}
+
+// Funciones de gestión de favoritos  ---------------------------------------------------------------------------------
+
+function guardarFavorito(idReceta) {
+    
+    // Obtener favoritos del localStorage, si no existen se crea un array
+    let favoritos ;
+    if(localStorage.getItem("favoritos")){
+        favoritos = JSON.parse(localStorage.getItem("favoritos"));
+    }else{
+        favoritos = [];
+    }
+
+    // Añadir la receta al array si todavía no existe en él
+    if(!favoritos.includes(idReceta)){
+        favoritos.push(idReceta);
+    }
+
+    // Guardar array actualizado en LocalStorage (convertir array a string porque LocalStorage sólo guarda string
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+
+    // Introducir localStorage.getItem("favoritos") en la consola para comprobar que los id se están almacenando
 }
 
 
@@ -51,9 +84,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if(resultados){
                 resultados.innerHTML = "";
             }
-            let mensaje = mensajeError("Cannot load categories. Reload the page or try again later.");
+            eliminarMensajeAnterior();
+            let mensajeError = mensaje("Cannot load categories. Reload the page or try again later.");
             if(select){
-                select.insertAdjacentElement("afterend", mensaje);
+                select.insertAdjacentElement("afterend", mensajeError);
             }
             console.error(error.message);
         });
@@ -118,8 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Guardar id de la receta en el botón de su card
                     // Al crear tarjetas dinámicamente, cada una tiene su propio botón "View recipe". Este botón está asociado a una receta concreta, por lo que tenemos que asociarlo a su id. Cada botón lleva consigo los datos que necesita gracias a DATASET (guarda datos personalizados en un elemento HTML)
                     boton.dataset.idReceta = receta.idMeal;
-                    // Evento boton-card  -----------------------------------------------------------------------------
-                    // MODAL RECETA
+                    
+                    // MODAL RECETA =====================================================================================
+                    
+                    // Botón card - apertura modal
                     boton.addEventListener("click", () => {
                         const idReceta = boton.dataset.idReceta;
                         const modalTitulo = document.querySelector(".modal-title");
@@ -174,30 +210,38 @@ document.addEventListener("DOMContentLoaded", () => {
                         .catch(error => {
                             const contenidoModal = document.querySelector(".modal-content");
                             contenidoModal.innerHTML = "";
-                            let mensaje = mensajeError("The recipe cannot be displayed. Please, reload and try again.");
-                            contenidoModal.appendChild(mensaje);
+                            eliminarMensajeAnterior();
+                            let mensajeError = mensaje("The recipe cannot be displayed. Please, reload and try again.");
+                            contenidoModal.appendChild(mensajeError);
                             console.error(error.message);
                         })
+
+                        // FAVORITOS  ------------------------------------------------------------------------------------
+                        const mensajeFavoritos = document.querySelector(".modal-footer .mensajeFavoritos");
+                        
+                        const botonGuardar = document.querySelector(".boton-guardar");
+                        botonGuardar.addEventListener("click", () => {
+                            guardarFavorito(idReceta);
+                            eliminarMensajeAnterior();
+                            let mensajeRecetaGuardada = mensaje("Recipe successfully saved!");
+                            mensajeFavoritos.innerHTML = "";
+                            mensajeFavoritos.appendChild(mensajeRecetaGuardada);
+                        });
+
                     });
-                    // Evento boton-card  -----------------------------------------------------------------------------
+                    // MODAL RECETA =====================================================================================
                 });
             })
             // Error al cargar recetas de la categoría (grid resultados)
             .catch(error => {
-                let mensaje = mensajeError("No results can be displayed for this category. Please, reload the page and try again.");
-                select.insertAdjacentElement("afterend", mensaje);
+                eliminarMensajeAnterior();
+                let mensajeError = mensaje("No results can be displayed for this category. Please, reload the page and try again.");
+                select.insertAdjacentElement("afterend", mensajeError);
                 console.error(error.message);
             });
         });
     }
     // Evento select (seleccionar categoría)
-
-
-   
-    
-
-    
-
 
 
 });
