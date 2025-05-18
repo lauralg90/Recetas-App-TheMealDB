@@ -341,23 +341,36 @@ document.addEventListener("DOMContentLoaded", () => {
                     botonVerReceta.addEventListener("click", () => {
                         datosModalReceta(datos.idMeal);
 
+                        // MODAL  ---------------------------------------------------------------------------------------
                         const mensajeFavoritos = document.querySelector(".modal-footer .mensajeFavoritos");
+                        const botonGuardar = document.querySelector(".modal-footer .boton-guardar");
                         const botonBorrar = document.querySelector(".modal-footer .boton-borrar");
+
+                        // Mostrar sólo botón guardar o borrar dependiendo de si la receta ya se guardó en favoritos
+                        if(comprobarSiEsFavorito(idReceta) === true){
+                            botonGuardar.style.display = "none";
+                            botonBorrar.style.display = "inline-block";
+                        }else{
+                            botonGuardar.style.display = "inline-block";
+                            botonBorrar.style.display = "none";
+                        }
+
+                        botonGuardar.addEventListener("click", () => {
+                            guardarFavorito(idReceta);
+                            botonGuardar.style.display = "none";
+                            botonBorrar.style.display = "inline-block";
+                        });
+
                         botonBorrar.addEventListener("click", () => {
                             borrarFavorito(idReceta);
-                            eliminarMensajeAnterior();
-                            let mensajeRecetaBorrada = mensaje("Recipe successfully removed!");
-                            mensajeFavoritos.innerHTML = "";
-                            mensajeFavoritos.appendChild(mensajeRecetaBorrada);
-                            setTimeout(() => {
-                                if (mensajeRecetaBorrada) {
-                                    mensajeRecetaBorrada.textContent = "";
-                                }
-                            }, 2000);
 
+                            botonGuardar.style.display = "inline-block";
+                            botonBorrar.style.display = "none";
+
+                            // Eliminar card del DOM
                             botonVerReceta.parentElement.parentElement.remove();
-
                         });
+                        // MODAL  ---------------------------------------------------------------------------------------
                     });
 
                     let botonEliminar = document.createElement("button");
