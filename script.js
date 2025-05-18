@@ -17,10 +17,52 @@ function eliminarMensajeAnterior() {
     }
 }
 
-// Funciones de gestión de favoritos  ---------------------------------------------------------------------------------
+// Funciones de tarjetas  ---------------------------------------------------------------------------------------------
 
-// localStorage.getItem("favoritos"); para ver datos almacenados
-// localStorage.removeItem("favoritos"); para limpiar datos almacenados
+function crearCardReceta(urlImagen, nombreReceta, ubicacion) {
+    // Card
+    let cardReceta = document.createElement("article");
+    cardReceta.classList.add("card-receta");
+    // Imagen
+    let figure = document.createElement("figure");
+    let img = document.createElement("img");
+    img.setAttribute("src", urlImagen);
+    figure.appendChild(img);
+    cardReceta.appendChild(figure);
+    // Div info
+    let divInfo = document.createElement("div");
+    cardReceta.appendChild(divInfo);
+    // Título
+    let titulo = document.createElement("h3");
+    titulo.textContent = nombreReceta;
+    divInfo.appendChild(titulo);
+    // Col Bootstrap
+    let col = document.createElement("div");
+    col.classList.add("col-md-6");
+    col.classList.add("col-lg-4");
+    col.appendChild(cardReceta);
+    if (ubicacion) {
+        ubicacion.appendChild(col);
+    }
+
+    return {cardReceta, divInfo};
+}
+
+function botonAbrirModal(textoBoton, ubicacion) {
+    let boton = document.createElement("a");
+    boton.classList.add("boton-modal");
+    boton.classList.add("boton-guardar");
+    boton.textContent = textoBoton;
+    boton.setAttribute("href", "#");
+    // Clases de Bootstrap para abrir la modal
+    boton.setAttribute("data-bs-toggle", "modal");
+    boton.setAttribute("data-bs-target", "#modalReceta");
+    ubicacion.appendChild(boton);
+
+    return boton;
+}
+
+// Funciones de gestión de favoritos  ---------------------------------------------------------------------------------
 
 let favoritos ;
 
@@ -123,45 +165,17 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(categoria => {
                 const arrayRecetas = categoria.meals;
                 arrayRecetas.forEach(receta => {
-                    // Card
-                    let cardReceta = document.createElement("article");
-                    cardReceta.classList.add("card-receta");
-                    // Imagen
-                    let figure = document.createElement("figure");
-                    let img = document.createElement("img");
-                    img.setAttribute("src", receta.strMealThumb);
-                    figure.appendChild(img);
-                    cardReceta.appendChild(figure);
-                    // Div info
-                    let divInfo = document.createElement("div");
-                    cardReceta.appendChild(divInfo);
-                    // Título
-                    let titulo = document.createElement("h3");
-                    titulo.textContent = receta.strMeal;
-                    divInfo.appendChild(titulo);
-                    // Botón
-                    let boton = document.createElement("a");
-                    boton.classList.add("boton-card");
-                    boton.textContent = "View recipe";
-                    boton.setAttribute("href", "#");
-                    // Clases de Bootstrap para abrir la modal
-                    boton.setAttribute("data-bs-toggle", "modal");
-                    boton.setAttribute("data-bs-target", "#modalReceta");
-                    divInfo.appendChild(boton);
-                    // Col Bootstrap
-                    let col = document.createElement("div");
-                    col.classList.add("col-md-6");
-                    col.classList.add("col-lg-4");
-                    col.appendChild(cardReceta);
-                    resultados.appendChild(col);
 
+                    let {divInfo} = crearCardReceta(receta.strMealThumb, receta.strMeal, resultados);
+                    
+                    let boton = botonAbrirModal("View recipe", divInfo);
+                   
                     // Guardar id de la receta en el botón de su card
                     // Al crear tarjetas dinámicamente, cada una tiene su propio botón "View recipe". Este botón está asociado a una receta concreta, por lo que tenemos que asociarlo a su id. Cada botón lleva consigo los datos que necesita gracias a DATASET (guarda datos personalizados en un elemento HTML)
                     boton.dataset.idReceta = receta.idMeal;
                     
-                    // MODAL RECETA =====================================================================================
-                    
-                    // Botón card - apertura modal
+                    // MODAL ============================================================================================
+                
                     boton.addEventListener("click", () => {
                         const idReceta = boton.dataset.idReceta;
                         const modalTitulo = document.querySelector(".modal-title");
@@ -236,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
 
                     });
-                    // MODAL RECETA =====================================================================================
+                    // MODAL ============================================================================================
                 });
             })
             // Error al cargar recetas de la categoría (grid resultados)
@@ -272,32 +286,11 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(datosReceta => {
                 let receta = datosReceta.meals;
                 receta.forEach(datos => {
-                    // Card
-                    let cardReceta = document.createElement("article");
-                    cardReceta.classList.add("card-receta");
-                    // Imagen
-                    let figure = document.createElement("figure");
-                    let img = document.createElement("img");
-                    img.setAttribute("src", datos.strMealThumb);
-                    figure.appendChild(img);
-                    cardReceta.appendChild(figure);
-                    // Div info
-                    let divInfo = document.createElement("div");
-                    cardReceta.appendChild(divInfo);
-                    // Título
-                    let titulo = document.createElement("h3");
-                    titulo.textContent = datos.strMeal;
-                    divInfo.appendChild(titulo);
-                    // Botón Ver Receta
-                    let botonVerReceta = document.createElement("a");
-                    botonVerReceta.classList.add("boton-modal");
-                    botonVerReceta.classList.add("boton-guardar");
-                    botonVerReceta.textContent = "View recipe";
-                    botonVerReceta.setAttribute("href", "#");
-                    // Clases de Bootstrap para abrir la modal
-                    botonVerReceta.setAttribute("data-bs-toggle", "modal");
-                    botonVerReceta.setAttribute("data-bs-target", "#modalReceta");
-                    divInfo.appendChild(botonVerReceta);
+
+                    let {divInfo} = crearCardReceta(datos.strMealThumb, datos.strMeal, gridFavoritos);
+                    
+                    botonAbrirModal("View recipe", divInfo);
+
                     // Boton Emliminar de favoritos
                     let botonEliminar = document.createElement("button");
                     botonEliminar.classList.add("boton-modal");
@@ -305,15 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     botonEliminar.textContent = "Delete from favourites";
                     botonEliminar.style.margin = 0;
                     botonEliminar.style.marginBottom = "16px";
-                    divInfo.appendChild(botonEliminar);
-                    // Col Bootstrap
-                    let col = document.createElement("div");
-                    col.classList.add("col-md-6");
-                    col.classList.add("col-lg-4");
-                    col.appendChild(cardReceta);
-                    if(gridFavoritos){
-                        gridFavoritos.appendChild(col);
-                    } 
+                    divInfo.appendChild(botonEliminar); 
                 });
                 
             })
