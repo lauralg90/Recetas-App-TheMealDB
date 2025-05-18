@@ -106,6 +106,10 @@ function datosModalReceta(idReceta) {
             contenidoModal.appendChild(mensajeError);
             console.error(error.message);
         })
+    
+    // Para poder acceder a los elementos de la modal luego
+    const modal = document.querySelector(".modal");
+    return modal;
 }
 
 // Funciones de gestión de favoritos  ---------------------------------------------------------------------------------
@@ -336,6 +340,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     botonVerReceta.addEventListener("click", () => {
                         datosModalReceta(datos.idMeal);
+
+                        const mensajeFavoritos = document.querySelector(".modal-footer .mensajeFavoritos");
+                        const botonBorrar = document.querySelector(".modal-footer .boton-borrar");
+                        botonBorrar.addEventListener("click", () => {
+                            borrarFavorito(idReceta);
+                            eliminarMensajeAnterior();
+                            let mensajeRecetaBorrada = mensaje("Recipe successfully removed!");
+                            mensajeFavoritos.innerHTML = "";
+                            mensajeFavoritos.appendChild(mensajeRecetaBorrada);
+                            setTimeout(() => {
+                                if (mensajeRecetaBorrada) {
+                                    mensajeRecetaBorrada.textContent = "";
+                                }
+                            }, 2000);
+
+                            botonVerReceta.parentElement.parentElement.remove();
+
+                        });
                     });
 
                     let botonEliminar = document.createElement("button");
