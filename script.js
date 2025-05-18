@@ -19,10 +19,14 @@ function eliminarMensajeAnterior() {
 
 // Funciones de gestión de favoritos  ---------------------------------------------------------------------------------
 
+// localStorage.getItem("favoritos"); para ver datos almacenados
+// localStorage.removeItem("favoritos"); para limpiar datos almacenados
+
+let favoritos ;
+
 function guardarFavorito(idReceta) {
     
-    // Obtener favoritos del localStorage, si no existen se crea un array
-    let favoritos ;
+    // Obtener favoritos del localStorage, si no existen se crea un array  
     if(localStorage.getItem("favoritos")){
         favoritos = JSON.parse(localStorage.getItem("favoritos"));
     }else{
@@ -36,8 +40,10 @@ function guardarFavorito(idReceta) {
 
     // Guardar array actualizado en LocalStorage (convertir array a string porque LocalStorage sólo guarda string
     localStorage.setItem("favoritos", JSON.stringify(favoritos));
+}
 
-    // Introducir localStorage.getItem("favoritos") en la consola para comprobar que los id se están almacenando
+function borrarFavorito(idReceta) {
+
 }
 
 
@@ -216,7 +222,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             console.error(error.message);
                         })
 
-                        // FAVORITOS  ------------------------------------------------------------------------------------
+                        // GUARDAR/BORRAR FAVORITO  ----------------------------------------------------------------------
+                        // Mensaje para el usuario al guardar o borrar receta
                         const mensajeFavoritos = document.querySelector(".modal-footer .mensajeFavoritos");
                         
                         const botonGuardar = document.querySelector(".boton-guardar");
@@ -243,6 +250,75 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // Evento select (seleccionar categoría)
 
+
+    // MOSTRAR FAVORITOS ------------------------------------------------------------------------------------------------
+
+    const gridFavoritos = document.querySelector(".grid-favoritos");
+    
+    let favoritos = JSON.parse(localStorage.getItem("favoritos"));
+    console.log("Favoritos:");
+    console.log(favoritos);
+
+    if(favoritos.length > 0){
+        favoritos.forEach(idReceta => {
+            fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idReceta}`)
+            .then(respuesta => {
+                if(!respuesta.ok){
+                    throw new Error ("Error en la petición HTTP: " + respuesta.status);
+                }else{
+                    return respuesta.json();
+                }
+            })
+            .then(datosReceta => {
+                let receta = datosReceta.meals;
+                receta.forEach(datos => {
+                    // Card
+                    let cardReceta = document.createElement("article");
+                    cardReceta.classList.add("card-receta");
+                    // Imagen
+                    let figure = document.createElement("figure");
+                    let img = document.createElement("img");
+                    img.setAttribute("src", datos.strMealThumb);
+                    figure.appendChild(img);
+                    cardReceta.appendChild(figure);
+                    // Div info
+                    let divInfo = document.createElement("div");
+                    cardReceta.appendChild(divInfo);
+                    // Título
+                    let titulo = document.createElement("h3");
+                    titulo.textContent = datos.strMeal;
+                    divInfo.appendChild(titulo);
+                    // Botón Ver Receta
+                    let botonVerReceta = document.createElement("a");
+                    botonVerReceta.classList.add("boton-modal");
+                    botonVerReceta.classList.add("boton-guardar");
+                    botonVerReceta.textContent = "View recipe";
+                    botonVerReceta.setAttribute("href", "#");
+                    // Clases de Bootstrap para abrir la modal
+                    botonVerReceta.setAttribute("data-bs-toggle", "modal");
+                    botonVerReceta.setAttribute("data-bs-target", "#modalReceta");
+                    divInfo.appendChild(botonVerReceta);
+                    // Boton Emliminar de favoritos
+                    let botonEliminar = document.createElement("button");
+                    botonEliminar.classList.add("boton-modal");
+                    botonEliminar.classList.add("boton-borrar");
+                    botonEliminar.textContent = "Delete from favourites";
+                    botonEliminar.style.margin = 0;
+                    botonEliminar.style.marginBottom = "16px";
+                    divInfo.appendChild(botonEliminar);
+                    // Col Bootstrap
+                    let col = document.createElement("div");
+                    col.classList.add("col-md-6");
+                    col.classList.add("col-lg-4");
+                    col.appendChild(cardReceta);
+                    if(gridFavoritos){
+                        gridFavoritos.appendChild(col);
+                    } 
+                });
+                
+            })
+        })   
+    }
 
 });
 // DOMContentLoaded
