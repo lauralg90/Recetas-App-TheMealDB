@@ -45,6 +45,7 @@ h1 {
 header#header {
     position: sticky;
     top: 0;
+    z-index: 999;
 }
 nav.navbar {
     background-color: var(--blanco) !important;
@@ -108,8 +109,32 @@ nav.navbar {
     }
 }
 
+/* FOOTER  ---------------------------------------------------------------------------------------------------------- */
+footer#footer {
+    background-color: var(--naranja);
+    color: var(--marron);
+    padding-top: 64px;
+    padding-bottom: 64px;
+    text-align: center;
+    a {
+        display: block;
+        color: var(--marron);
+        font-size: 2rem;   
+        font-family: "Oswald", sans-serif;
+        text-transform: uppercase;
+        padding: 8px;
+        margin-top: 20px;
+        border-radius: var(--borderRadius);
+        transition: all 0.2s ease-in;
+        &:hover {
+            color: var(--blanco);
+            background: var(--marron);
+        }
+    }
+}
 
-/* INICIO  ----------------------------------------------------------------------------------------------------- */
+
+/* CATEGORÍAS  ------------------------------------------------------------------------------------------------------ */
 
 select {
   appearance: none;
@@ -245,7 +270,4 @@ select:focus {
     color: var(--blanco);
     font-weight: 600;
 }
-
-
-/* FAVORITOS  ------------------------------------------------------------------------------------------------------ */
 

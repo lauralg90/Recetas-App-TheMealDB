@@ -257,16 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         botonGuardar.addEventListener("click", () => {
                             guardarFavorito(idReceta);
-                            eliminarMensajeAnterior();
-                            let mensajeRecetaGuardada = mensaje("Recipe successfully saved!");
-                            mensajeFavoritos.innerHTML = "";
-                            mensajeFavoritos.appendChild(mensajeRecetaGuardada);
-                            // El mensaje se queda por defecto en las siguientes modales que se abren, así que lo elimino pasados 2 segundos para que no se muestre en la siguiente modal, no he encontrado otra forma de hacerlo que funcionase
-                            setTimeout(() => {
-                                if (mensajeRecetaGuardada) {
-                                    mensajeRecetaGuardada.textContent = "";
-                                }
-                            }, 2000);
                             botonGuardar.style.display = "none";
                             botonBorrar.style.display = "inline-block";
 
@@ -274,15 +264,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         botonBorrar.addEventListener("click", () => {
                             borrarFavorito(idReceta);
-                            eliminarMensajeAnterior();
-                            let mensajeRecetaBorrada = mensaje("Recipe successfully removed!");
-                            mensajeFavoritos.innerHTML = "";
-                            mensajeFavoritos.appendChild(mensajeRecetaBorrada);
-                            setTimeout(() => {
-                                if (mensajeRecetaBorrada) {
-                                    mensajeRecetaBorrada.textContent = "";
-                                }
-                            }, 2000);
                             botonGuardar.style.display = "inline-block";
                             botonBorrar.style.display = "none";
                         });
@@ -363,10 +344,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         botonBorrar.addEventListener("click", () => {
                             borrarFavorito(idReceta);
-
                             botonGuardar.style.display = "inline-block";
                             botonBorrar.style.display = "none";
-
                             // Eliminar card del DOM
                             botonVerReceta.parentElement.parentElement.remove();
                         });
